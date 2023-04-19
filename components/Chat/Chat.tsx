@@ -68,6 +68,10 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const [generateImage, setGenerateImage] = useState(
+    selectedConversation?.generateImage || false,
+  );
+
   const handleSend = useCallback(
     async (message: Message, deleteCount = 0, plugin: Plugin | null = null) => {
       if (selectedConversation) {
@@ -80,11 +84,13 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
           updatedConversation = {
             ...selectedConversation,
             messages: [...updatedMessages, message],
+            generateImage,
           };
         } else {
           updatedConversation = {
             ...selectedConversation,
             messages: [...selectedConversation.messages, message],
+            generateImage,
           };
         }
         homeDispatch({
@@ -98,7 +104,8 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
           messages: updatedConversation.messages,
           key: apiKey,
           prompt: updatedConversation.prompt,
-          temperature: updatedConversation.temperature
+          temperature: updatedConversation.temperature,
+          generateImage,
         };
         const endpoint = getEndpoint(plugin);
         let body;
@@ -251,6 +258,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
       pluginKeys,
       selectedConversation,
       stopConversationRef,
+      generateImage,
     ],
   );
 
@@ -314,6 +322,10 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
   //     homeDispatch({ field: 'currentMessage', value: undefined });
   //   }
   // }, [currentMessage]);
+
+  useEffect(() => {
+    setGenerateImage(selectedConversation?.generateImage || false);
+  }, [selectedConversation]);
 
   useEffect(() => {
     throttledScrollDown();
@@ -425,14 +437,24 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                       />
 
                       <TemperatureSlider
-                          label="Temperature"
-                          onChangeTemperature={(temperature) =>
-                            handleUpdateConversation(selectedConversation, {
-                              key: 'temperature',
-                              value: temperature,
-                            })
-                          }
+                        label="Temperature"
+                        onChangeTemperature={(temperature) =>
+                          handleUpdateConversation(selectedConversation, {
+                            key: 'temperature',
+                            value: temperature,
+                          })
+                        }
+                      />
+
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          className="form-checkbox"
+                          checked={generateImage}
+                          onChange={(e) => setGenerateImage(e.target.checked)}
                         />
+                        <span className="ml-2">Generate Image</span>
+                      </div>
                     </div>
                   )}
                 </div>
