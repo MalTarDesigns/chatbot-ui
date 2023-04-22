@@ -33,6 +33,8 @@ import { ModelSelect } from './ModelSelect';
 import { SystemPrompt } from './SystemPrompt';
 import { TemperatureSlider } from './Temperature';
 import { MemoizedChatMessage } from './MemoizedChatMessage';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
@@ -40,6 +42,8 @@ interface Props {
 
 export const Chat = memo(({ stopConversationRef }: Props) => {
   const { t } = useTranslation('chat');
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
 
   const {
     state: {
@@ -346,6 +350,17 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
       }
     };
   }, [messagesEndRef]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      toast.error('You need to be logged in to access the chat page.');
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
+
+  if (!isAuthenticated) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="relative flex-1 overflow-hidden bg-white dark:bg-[#343541]">
