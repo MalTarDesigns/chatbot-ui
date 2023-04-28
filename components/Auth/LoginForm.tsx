@@ -1,10 +1,3 @@
-import {
-  Button,
-  Card,
-  Checkbox,
-  Input,
-  Typography,
-} from '@material-tailwind/react';
 import { useState } from 'react';
 
 import Link from 'next/link';
@@ -22,7 +15,7 @@ const LoginForm = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:4000//api/v1/login', {
+      const response = await fetch('http://localhost:4000/api/v1/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,20 +23,17 @@ const LoginForm = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log(response);
-
-      if (email && password && response.status === 200) {
-        alert('Login successful!');
-        login();
-
-        router.push('/chat');
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || 'An error occurred');
       }
+
+      alert('Login successful!');
+      // login();
+      router.push('/chat');
     } catch (error: any) {
-      if (error.response) {
-        alert(`Error: ${error.response.data.message}`);
-      } else {
-        console.error('Error:', error.message);
-      }
+      console.error('Error:', error.message);
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -106,7 +96,7 @@ const LoginForm = () => {
             </a>
           </div>
           <div className="mt-4 text-sm text-center">
-            Don't have an account?{' '}
+            Dont have an account?{' '}
             <Link href="/signup">
               <span className="underline hover:text-blue-700">Sign up</span>
             </Link>
@@ -116,4 +106,8 @@ const LoginForm = () => {
     </div>
   );
 };
+
 export default LoginForm;
+
+
+

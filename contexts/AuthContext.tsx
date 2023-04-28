@@ -1,41 +1,61 @@
-// src/contexts/AuthContext.tsx
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
+import AuthService from '../services/authService';
 
-interface AuthContextData {
-  isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
+interface AuthContextProps {
+  user: any;
+  login: (user: { username: string; password: string; }) => Promise<void>;
+  signUp: (user: { username: string; password: string; }) => Promise<void>;
+  logout: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  resendVerification: (email: string) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextData>(null as any);
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const AuthContext = createContext<Partial<AuthContextProps>>({});
 
 export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const authService = new AuthService();
 
-  useEffect(() => {
-    // Implement logic here to check user authentication state
-    // e.g., checking localStorage or cookies
-  }, []);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
-  const login = () => {
-    // Implement login logic here
-    setIsAuthenticated(true);
+
+  const signUp = async (user: any) => {
+    const response = await authService.signUp(user);
+    setUser(response.user);
   };
 
-  const logout = () => {
-    // Implement logout logic here
-    setIsAuthenticated(false);
+  const login = async (user: any) => {
+    const response = await authService.login(user);
+    setUser(response.user);
   };
 
-  const value = {
-    isAuthenticated,
-    login,
-    logout,
+  const logout = async () => {
+    // Call the logout API
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const verify = async (token: any) => {
+    const response = await authService.verify(token);
+    setUser(response.user);
+  };
+
+  const forgotPassword = async (email: string) => {
+    await authService.forgotPassword(email);
+  };
+
+  const resendVerification = async (email: string) => {
+    await authService.resendVerification(email);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{ user, login, signUp, logout, forgotPassword, resendVerification }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
