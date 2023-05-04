@@ -1,21 +1,21 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { AuthContext, useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 const withAuth = (WrappedComponent: any) => {
   const RequiresAuthentication = (props: any) => {
     const Router = useRouter();
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
 
-    console.log('props', props)
     useEffect(() => {
-      console.log('user', user);
-      if (!user) {
+      console.log('user', user)
+      if (!loading && !user) {
         Router.replace('/login');
       }
     }, [user, Router]);
+    
 
-    return user ? <WrappedComponent {...props} /> : null;
+    return loading ? <div>Loading...</div> : (user ? <WrappedComponent {...props} /> : null);
   };
 
   // This line sets the display name.

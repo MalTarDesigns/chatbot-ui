@@ -22,7 +22,14 @@ export default class AuthService {
       body: JSON.stringify(user),
     });
 
-    return response.json();
+    const userData = await response.json();
+
+    if (response.ok) {
+      // Store user data in local storage
+      localStorage.setItem('user', JSON.stringify(userData));
+    }
+
+    return userData;
   }
 
   async verify(token: string) {
@@ -43,7 +50,7 @@ export default class AuthService {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({email}),
+      body: JSON.stringify({ email }),
     });
 
     return response.json();
@@ -55,9 +62,15 @@ export default class AuthService {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({email}),
+      body: JSON.stringify({ email }),
     });
 
     return response.json();
   }
+
+  async logout() {
+    // Remove user data from local storage
+    localStorage.removeItem('user');
+  }
+  
 }

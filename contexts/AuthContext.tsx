@@ -6,9 +6,10 @@ interface AuthContextProps {
   user: any;
   login: (user: { email: string; password: string; }) => Promise<void>;
   signUp: (user: { username: string; email: string; password: string; }) => Promise<void>;
-  logout: () => Promise<void>;
+  logout: () => void;
   forgotPassword: (email: string) => Promise<void>;
   resendVerification: (email: string) => Promise<void>;
+  loading: boolean;
 }
 
 export const AuthContext = createContext<Partial<AuthContextProps>>({});
@@ -16,9 +17,20 @@ export const AuthContext = createContext<Partial<AuthContextProps>>({});
 export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const authService = new AuthService();
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const router = useRouter();
 
+  useEffect(() => {
+    const checkUserLoggedIn = () => {
+      const userData = localStorage.getItem('user');
+      setUser(userData ? JSON.parse(userData) : null);
+      setLoading(false);
+    };
+    checkUserLoggedIn();
+  }, []);
+  
 
   const signUp = async (user: any) => {
     const response = await authService.signUp(user);
@@ -27,13 +39,14 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
 
   const login = async (user: { email: string; password: string; }) => {
     const response = await authService.login(user);
-    console.log(response)
     setUser(response);
   };
 
-  const logout = async () => {
-    // Call the logout API
-  };
+  const logout = () => {
+    authService.logout();
+    setUser(null);
+    router.push('/login');
+  }; 
 
   const verify = async (token: any) => {
     const response = await authService.verify(token);
@@ -50,7 +63,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
 
   return (
     <AuthContext.Provider
-      value={{ user, login, signUp, logout, forgotPassword, resendVerification }}
+      value={{ user, login, signUp, logout, forgotPassword, resendVerification, loading }}
     >
       {children}
     </AuthContext.Provider>
@@ -58,5 +71,11 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
 };
 
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+
+  return context;
 }
