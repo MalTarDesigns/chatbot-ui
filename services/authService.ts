@@ -1,5 +1,5 @@
 export default class AuthService {
-  baseUrl: string = 'YOUR_AUTH_API_URL';
+  baseUrl: string = 'https://phpstack-404120-3327055.cloudwaysapps.com/api/v1';
 
   async signUp(user: { email: string; password: string }) {
     const response = await fetch(`${this.baseUrl}/signup`, {
