@@ -12,7 +12,7 @@ const withAuth = (WrappedComponent: any) => {
       if (!loading && !user) {
         Router.replace('/login');
       }
-    }, [user, Router]);
+    }, [user, loading, Router]);
     
 
     return loading ? <div>Loading...</div> : (user ? <WrappedComponent {...props} /> : null);

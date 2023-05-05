@@ -5,9 +5,10 @@ import AuthService from '../services/authService';
 interface AuthContextProps {
   user: any;
   login: (user: { email: string; password: string; }) => Promise<void>;
-  signUp: (user: { username: string; email: string; password: string; }) => Promise<void>;
+  signUp: (user: { name: string; email: string; password: string; }) => Promise<void>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (token: string, password: string) => Promise<void>;
   resendVerification: (email: string) => Promise<void>;
   loading: boolean;
 }
@@ -23,7 +24,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
   const router = useRouter();
 
   useEffect(() => {
-    const checkUserLoggedIn = () => {
+    const checkUserLoggedIn = async () => {
       const userData = localStorage.getItem('user');
       setUser(userData ? JSON.parse(userData) : null);
       setLoading(false);
@@ -32,7 +33,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
   }, []);
   
 
-  const signUp = async (user: any) => {
+  const signUp = async (user: { name: string; email: string; password: string; }) => {
     const response = await authService.signUp(user);
     setUser(response);
   };
@@ -57,13 +58,17 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
     await authService.forgotPassword(email);
   };
 
+  const resetPassword = async (token: string, password: string) => {
+    await authService.resetPassword(token, password);
+  };
+
   const resendVerification = async (email: string) => {
     await authService.resendVerification(email);
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, login, signUp, logout, forgotPassword, resendVerification, loading }}
+      value={{ user, login, signUp, logout, forgotPassword, resetPassword, resendVerification, loading }}
     >
       {children}
     </AuthContext.Provider>

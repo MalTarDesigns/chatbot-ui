@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import axios from 'axios';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import router from 'next/router';
 
 const RegisterForm = () => {
-  const [name, setName] = useState('');
+  const [name, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { signUp } = useAuth();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -17,24 +19,18 @@ const RegisterForm = () => {
     }
 
     try {
-            // const response = await fetch("http://localhost:4000//api/v1/signup", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ name, email, password }),
-    //   });
-    
-        // if (response.status === 200) {
-        //   alert("Registration successful!");
-        // } else {
-        //   alert(`Error: ${response.data.message}`);
-        // }
-      } catch (error: any) {
-        const errorMessage = error.response?.data?.message || error.message;
-        alert(`Error: ${errorMessage}`);
+      if (signUp) {
+        await signUp({ name, email, password });
+        alert("Registration successful!");
+        router.push('login');
+      } else {
+        throw new Error('SignUp function is not available');
       }
-    };
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || error.message;
+      alert(`Error: ${errorMessage}`);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -55,7 +51,7 @@ const RegisterForm = () => {
               type="text"
               id="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
               required
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />

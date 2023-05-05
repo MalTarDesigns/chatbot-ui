@@ -68,6 +68,27 @@ export default class AuthService {
     return response.json();
   }
 
+  async resetPassword(token: string, password: string) {
+    try {
+      const response = await fetch(`${this.baseUrl}/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      return true;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   async logout() {
     // Remove user data from local storage
     localStorage.removeItem('user');
