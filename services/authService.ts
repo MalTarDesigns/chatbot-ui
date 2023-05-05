@@ -1,89 +1,66 @@
-export default class AuthService {
-  baseUrl: string = 'https://phpstack-404120-3327055.cloudwaysapps.com/api/v1';
+import { interceptedFetch } from '@/utils/interceptors';
 
-  async signUp(user: { email: string; password: string }) {
-    const response = await fetch(`${this.baseUrl}/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
+export default class AuthService {
+  apiUrl: string = 'https://phpstack-404120-3327055.cloudwaysapps.com/api/v1';
+
+  async request(
+    url: string,
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    body?: Record<string, any>,
+    skipInterceptor?: boolean
+  ) {
+    const headers = new Headers({
+      "Content-Type": "application/json",
     });
+
+    if (skipInterceptor) {
+      headers.append("skipInterceptor", "true");
+    }
+
+    const options: RequestInit = {
+      method,
+      headers,
+    };
+
+    if (body) {
+      options.body = JSON.stringify(body);
+    }
+
+    const response = await interceptedFetch(url, options);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
 
     return response.json();
   }
 
+  async signUp(user: { email: string; password: string }) {
+    return await this.request(`${this.apiUrl}/signup`, 'POST', user);
+  }
+
   async login(user: { email: string; password: string }) {
-    const response = await fetch(`${this.baseUrl}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    });
-
-    const userData = await response.json();
-
-    if (response.ok) {
-      // Store user data in local storage
-      localStorage.setItem('user', JSON.stringify(userData));
-    }
-
+    const userData = await this.request(`${this.apiUrl}/login`, 'POST', user);
+    localStorage.setItem('user', JSON.stringify(userData));
     return userData;
   }
 
   async verify(token: string) {
-    const response = await fetch(`${this.baseUrl}/verify`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-    });
-
-    return response.json();
+    return await this.request(`${this.apiUrl}/verify`, 'POST', { token }, true);
   }
 
   async forgotPassword(email: string) {
-    const response = await fetch(`${this.baseUrl}/forgotpassword`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    return response.json();
+    return await this.request(`${this.apiUrl}/forgot-password`, 'POST', { email });
   }
 
   async resendVerification(email: string) {
-    const response = await fetch(`${this.baseUrl}/resend-verification`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    return response.json();
+    return await this.request(`${this.apiUrl}/resend-verification`, 'POST', { email });
   }
 
   async resetPassword(token: string, password: string) {
     try {
-      const response = await fetch(`${this.baseUrl}/reset-password`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-
-      return true;
+      return await this.request(`${this.apiUrl}/reset-password`, 'POST', { token, password });
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -93,5 +70,4 @@ export default class AuthService {
     // Remove user data from local storage
     localStorage.removeItem('user');
   }
-  
 }
