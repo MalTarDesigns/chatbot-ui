@@ -9,6 +9,7 @@ import { getSettings, saveSettings } from '@/utils/app/settings';
 import { Settings } from '@/types/settings';
 
 import HomeContext from '@/pages/api/home/home.context';
+import { signOut } from 'next-auth/react';
 
 interface Props {
   open: boolean;
@@ -96,6 +97,16 @@ export const SettingDialog: FC<Props> = ({ open, onClose }) => {
               }}
             >
               {t('Save')}
+            </button>
+
+            <button
+              type="button"
+              className="w-full px-4 py-2 mt-6 border rounded-lg shadow border-neutral-500 text-neutral-900 hover:bg-neutral-100 focus:outline-none dark:border-neutral-800 dark:border-opacity-50 dark:bg-white dark:text-black dark:hover:bg-neutral-300"
+              onClick={() => {
+               signOut();
+              }}
+            >
+              {t('Logout')}
             </button>
           </div>
         </div>
