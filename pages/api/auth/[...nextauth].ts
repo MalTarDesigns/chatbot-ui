@@ -6,59 +6,58 @@ const authService = new AuthService();
 
 const providers = [
   CredentialsProvider({
-    // The name to display on the sign in form (e.g. "Sign in with...")
     name: "Credentials",
-    // `credentials` is used to generate a form on the sign in page.
-    // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-    // e.g. domain, username, password, 2FA token, etc.
-    // You can pass any HTML attribute to the <input> tag through the object.
     credentials: {
       email: { label: "Email", type: "text", placeholder: "jsmith" },
       password: { label: "Password", type: "password" }
     },
-    async authorize(credentials, req) {
-      const { email, password } = credentials as any
-
-      const user = await authService.login({ email, password });
-
-      if (user) {
-        return user;
-      } else {
+    async authorize(credentials) {
+      const { email, password } = credentials as any;
+    
+      try {
+        const response = await fetch(`${authService.apiUrl}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+    
+        if (response.ok) {
+          const user = await response.json();
+          return user;
+        } else {
+          console.error(`Error during authentication: ${response.status} ${response.statusText}`);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error during authentication:', error);
         return null;
       }
     }
   })
 ];
 
-export const authOptions: NextAuthOptions = {
-  providers: providers,
+const authOptions: NextAuthOptions = {
+  providers,
   session: { strategy: 'jwt' },
   pages: {
     signIn: '/login'
   },
   debug: true,
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      const isAllowedToSignIn = true
-      if (isAllowedToSignIn) {
-        return true
+    async signIn({ user }) {
+      if (user) {
+        return true;
       } else {
-        // Return false to display a default error message
-        return false
+        return false;
         // Or you can return a URL to redirect to:
         // return '/unauthorized'
       }
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      if (user) {
-        // Add custom logic here if needed
-        console.log(user);
-      }
-      return token;
+    async jwt({ token, user }) {
+      return user ? { ...token, ...user } : token;
     },
     async session({ session, token }) {
-      // Add custom logic here if needed
-      console.log(session);
+      session.user = token;
       return session;
     },
   }
