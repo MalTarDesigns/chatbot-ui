@@ -8,7 +8,6 @@ import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 
 import '@/styles/globals.css';
-import { AuthProvider } from '@/contexts/AuthContext';
 
 const inter = Inter({ subsets: ['latin'] });
 

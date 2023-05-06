@@ -40,7 +40,8 @@ import HomeContext from './home.context';
 import { HomeInitialState, initialState } from './home.state';
 
 import { v4 as uuidv4 } from 'uuid';
-import withAuth from '@/utils/app/withAuth';
+import { useSession } from 'next-auth/react';
+import LandingPage from '@/components/Landing/Landing';
 
 interface Props {
   serverSideApiKeyIsSet: boolean;
@@ -76,6 +77,9 @@ const Home = ({
   } = contextValue;
 
   const stopConversationRef = useRef<boolean>(false);
+
+  const { data: session, status } = useSession();
+  const isLoading = status === 'loading';
 
   const { data, error, refetch } = useQuery(
     ['GetModels', apiKey, serverSideApiKeyIsSet],
@@ -369,32 +373,38 @@ const Home = ({
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {selectedConversation && (
-        <main
-          className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
-        >
-          <div className="fixed top-0 w-full sm:hidden">
-            <Navbar
-              selectedConversation={selectedConversation}
-              onNewConversation={handleNewConversation}
-            />
-          </div>
-
-          <div className="flex h-full w-full pt-[48px] sm:pt-0">
-            <Chatbar />
-
-            <div className="flex flex-1">
-              <Chat stopConversationRef={stopConversationRef} />
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : !session ? (
+        <LandingPage />
+      ) : (
+        selectedConversation && (
+          <main
+            className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
+          >
+            <div className="fixed top-0 w-full sm:hidden">
+              <Navbar
+                selectedConversation={selectedConversation}
+                onNewConversation={handleNewConversation}
+              />
             </div>
 
-            <Promptbar />
-          </div>
-        </main>
+            <div className="flex h-full w-full pt-[48px] sm:pt-0">
+              <Chatbar />
+
+              <div className="flex flex-1">
+                <Chat stopConversationRef={stopConversationRef} />
+              </div>
+
+              <Promptbar />
+            </div>
+          </main>
+        )
       )}
     </HomeContext.Provider>
   );
 };
-export default withAuth(Home);
+export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   const defaultModelId =

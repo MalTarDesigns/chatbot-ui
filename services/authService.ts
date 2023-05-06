@@ -36,12 +36,13 @@ export default class AuthService {
     return response.json();
   }
 
-  async signUp(user: { email: string; password: string }) {
+  async signUp(user: { name: string, email: string; password: string }) {
     return await this.request(`${this.apiUrl}/signup`, 'POST', user);
   }
 
   async login(user: { email: string; password: string }) {
     const userData = await this.request(`${this.apiUrl}/login`, 'POST', user);
+    console.log(userData);
     localStorage.setItem('user', JSON.stringify(userData));
     return userData;
   }

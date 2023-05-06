@@ -3,32 +3,38 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { useAuth } from '@/contexts/AuthContext';
+import { signIn } from 'next-auth/react';
 
 const LoginForm = () => {
-  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
-
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
+  
     try {
       const user = { email, password };
-
-      if (login) {
-        await login(user);
-        alert('Login successful!');
-        router.push('/');
+  
+      const response = await signIn('credentials', {
+        email: user.email,
+        password: user.password,
+        redirect: false,
+        callbackUrl: '/',
+      }) as any;
+  
+      if (response.error) {
+        console.error('Error:', response.error);
+        alert(`Error: ${response.error}`);
       } else {
-        throw new Error('Login function is not available');
+        console.log('response', response);
+        router.push('/');
       }
     } catch (error: any) {
       console.error('Error:', error.message);
       alert(`Error: ${error.message}`);
     }
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">

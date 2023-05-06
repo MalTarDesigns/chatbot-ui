@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/contexts/AuthContext';
 import router from 'next/router';
+import AuthService from '@/services/authService';
 
 const RegisterForm = () => {
   const [name, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { signUp } = useAuth();
+  const authService = new AuthService();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -19,8 +19,8 @@ const RegisterForm = () => {
     }
 
     try {
-      if (signUp) {
-        await signUp({ name, email, password });
+      if (authService) {
+        await authService.signUp({ name, email, password });
         alert("Registration successful!");
         router.push('login');
       } else {
