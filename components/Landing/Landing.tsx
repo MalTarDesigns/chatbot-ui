@@ -12,7 +12,24 @@ const LandingPage = () => {
     <div className="min-h-screen flex flex-col">
       <header className="p-4 bg-blue-600 text-white flex justify-between items-center">
         <h1 className="text-xl font-bold">Promptify</h1>
-        <nav className="flex space-x-4">
+        <nav className="flex space-x-12">
+        <Link href="#home">
+              <span className="text-white">Home</span>
+            </Link>
+            <Link href="#features">
+              <span className="text-white">Features</span>
+            </Link>
+            <Link href="#testimonials">
+              <span className="text-white">Testimonials</span>
+            </Link>
+            <Link href="/blog">
+              <span className="text-white">Blog</span>
+            </Link>
+            <Link href="#contact">
+              <span className="text-white">Contact</span>
+            </Link>
+            </nav>
+          <nav className="flex space-x-4 ml-4">
           {!isLoading && !session && (
             <>
               <Link href="#" passHref onClick={() => signIn()}>
@@ -64,6 +81,11 @@ const LandingPage = () => {
           <h3 className="text-2xl font-semibold text-center">Features</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="space-y-4">
+              <img
+                src="https://via.placeholder.com/300x200"
+                alt="Idea Generation"
+                className="w-full h-auto mb-4"
+              />
               <h4 className="text-xl font-semibold">Idea Generation</h4>
               <p>
                 Generate ideas for blog posts, articles, marketing materials,
@@ -71,6 +93,11 @@ const LandingPage = () => {
               </p>
             </div>
             <div className="space-y-4">
+              <img
+                src="https://via.placeholder.com/300x200"
+                alt="Custom Prompts"
+                className="w-full h-auto mb-4"
+              />
               <h4 className="text-xl font-semibold">Custom Prompts</h4>
               <p>
                 Create custom prompts for unique teaching materials or to
@@ -78,6 +105,11 @@ const LandingPage = () => {
               </p>
             </div>
             <div className="space-y-4">
+              <img
+                src="https://via.placeholder.com/300x200"
+                alt="Collaboration"
+                className="w-full h-auto mb-4"
+              />
               <h4 className="text-xl font-semibold">Collaboration</h4>
               <p>
                 Collaborate with others and share your ideas or projects with
@@ -106,6 +138,17 @@ const LandingPage = () => {
               </p>
               <p className="font-bold">- John Smith, Marketing Manager</p>
             </div>
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-8">
+          <h3 className="text-2xl font-semibold text-center">Our Blog</h3>
+          <div className="text-center">
+            <Link href="/blog">
+              <span className="bg-blue-600 text-white px-6 py-3 rounded-md">
+                Visit Our Blog
+              </span>
+            </Link>
           </div>
         </section>
       </main>
