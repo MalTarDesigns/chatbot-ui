@@ -34,20 +34,20 @@ const RegisterForm = () => {
 
   return (
     <div className="flex flex-col items-center bg-white font-helvetica min-h-screen relative">
-      
-      <div style={{backgroundImage: "url('/images/logo-background.png')"}} className="w-full flex justify-center mb-[18px]">
+
+      <div style={{ backgroundImage: "url('/images/logo-background.png')" }} className="w-full flex justify-center mb-[18px]">
         <img className='h-[207px] w-[276px]' src='images/app-logo.png' />
       </div>
-      
+
       <div className='max-w-[375px] w-full flex flex-col items-center z-[9]'>
 
         <div>Create your Account</div>
 
         <div className="flex flex-col justify-center min-w-[255px]">
-        <form
-          onSubmit={handleSubmit}
-          className="overflow-hidden"
-        >
+          <form
+            onSubmit={handleSubmit}
+            className="overflow-hidden"
+          >
 
             <div className="mb-4 mt-6 relative">
               <input
@@ -122,43 +122,43 @@ const RegisterForm = () => {
               </label>
             </div>
 
-          <button
-            type="submit"
-            className="bg-gradient-to-r from-[#FF5E00] to-[#38A8BF] text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full h-[43px]"
-          >
-            Sign Up
-          </button>
-          <p className="mt-4">
-            <span className='text-[#7B7B7B]'>Already have an account?</span>{' '}
-            <Link href="/login">
-              <span className="text-[#38A8BF]">Login</span>
-            </Link>
-          </p>
-        </form>
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-[#FF5E00] to-[#38A8BF] text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full h-[43px]"
+            >
+              Sign Up
+            </button>
+            <p className="mt-4">
+              <span className='text-[#7B7B7B]'>Already have an account?</span>{' '}
+              <Link href="/login">
+                <span className="text-[#38A8BF]">Login</span>
+              </Link>
+            </p>
+          </form>
 
-        <div className='flex items-center mt-2'>
-          <div className='border-b border-[#CECECE] grow'></div>
-          <div className='text-[#7B7B7B] pl-[7px] pr-[7px]'>or Sign up with</div>
-          <div className='border-b border-[#CECECE] grow'></div>
-        </div>
-
-        <div className='flex gap-[27px] justify-center mt-2'>
-          <div className='flex h-[41px] w-[41px] border border-[#C8C8C8] justify-center items-center rounded-[50%]'>
-            <img src='/images/google.svg' />
+          <div className='flex items-center mt-2'>
+            <div className='border-b border-[#CECECE] grow'></div>
+            <div className='text-[#7B7B7B] pl-[7px] pr-[7px]'>or Sign up with</div>
+            <div className='border-b border-[#CECECE] grow'></div>
           </div>
 
-          <div className='flex h-[41px] w-[41px] border border-[#C8C8C8] justify-center items-center rounded-[50%]'>
-            <img src='/images/facebook.svg' />
-          </div>
+          <div className='flex gap-[27px] justify-center mt-2'>
+            <div className='flex h-[41px] w-[41px] border border-[#C8C8C8] justify-center items-center rounded-[50%]'>
+              <img src='/images/google.svg' />
+            </div>
 
-          <div className='flex h-[41px] w-[41px] border border-[#C8C8C8] justify-center items-center rounded-[50%]'>
-            <div>
-              <img className='relative right-[-8px]' src='/images/leaf.svg' />
-              <img src='/images/apple.svg' />
+            <div className='flex h-[41px] w-[41px] border border-[#C8C8C8] justify-center items-center rounded-[50%]'>
+              <img src='/images/facebook.svg' />
+            </div>
+
+            <div className='flex h-[41px] w-[41px] border border-[#C8C8C8] justify-center items-center rounded-[50%]'>
+              <div>
+                <img className='relative right-[-8px]' src='/images/leaf.svg' />
+                <img src='/images/apple.svg' />
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
 
       <img className='w-full h-auto max-h-[210px] absolute bottom-0' src='/images/app-theme-background.png' />
