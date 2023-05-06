@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Helvetica';
+  src: url('/fonts/helvetica/helvetica-normal/Helvetica.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  /* font-display: swap; */
+}
+
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
@@ -26,10 +34,6 @@
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
-}
-
-html {
-  background: #202123;
 }
 
 @media (max-width: 720px) {

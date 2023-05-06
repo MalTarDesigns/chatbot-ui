@@ -8,6 +8,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {},
+    fontFamily: {
+      'helvetica': ['Helvetica', 'Arial', 'sans-serif'],
+    }
   },
   variants: {
     extend: {
