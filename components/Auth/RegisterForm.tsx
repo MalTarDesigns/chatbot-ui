@@ -33,15 +33,15 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-white font-helvetica min-h-screen relative">
+    <div className="flex flex-col items-center bg-white font-helvetica min-h-screen relative justify-center">
 
-      <div style={{ backgroundImage: "url('/images/logo-background.png')" }} className="w-full flex justify-center mb-[18px]">
+      <div className="w-full flex justify-center mb-[18px]">
         <img className='h-[207px] w-[276px]' src='images/app-logo.png' />
       </div>
 
-      <div className='max-w-[375px] w-full flex flex-col items-center z-[9]'>
+      <div className='max-w-sm w-full flex flex-col items-center z-[9]'>
 
-        <div>Create your Account</div>
+      <div className="text-xl font-semibold">Create your Account</div>
 
         <div className="flex flex-col justify-center min-w-[255px]">
           <form
@@ -136,13 +136,13 @@ const RegisterForm = () => {
             </p>
           </form>
 
-          <div className='flex items-center mt-2'>
+          {/* TODO: Add the below code back when we add third=party signup */}
+          {/* <div className='flex items-center mt-2'>
             <div className='border-b border-[#CECECE] grow'></div>
             <div className='text-[#7B7B7B] pl-[7px] pr-[7px]'>or Sign up with</div>
             <div className='border-b border-[#CECECE] grow'></div>
-          </div>
-
-          <div className='flex gap-[27px] justify-center mt-2'>
+          </div> */}
+          {/* <div className='flex gap-x-4 justify-center mt-2'>
             <div className='flex h-[41px] w-[41px] border border-[#C8C8C8] justify-center items-center rounded-[50%]'>
               <img src='/images/google.svg' />
             </div>
@@ -157,11 +157,9 @@ const RegisterForm = () => {
                 <img src='/images/apple.svg' />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
-
-      <img className='w-full h-auto max-h-[210px] absolute bottom-0' src='/images/app-theme-background.png' />
     </div>
   );
 };
