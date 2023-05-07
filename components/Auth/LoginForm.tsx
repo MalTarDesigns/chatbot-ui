@@ -57,7 +57,7 @@ const LoginForm = () => {
               <input
                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-rose-600"
                 id="email"
-                type="text"
+                type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
