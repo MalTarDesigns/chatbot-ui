@@ -7,7 +7,8 @@ export default class AuthService {
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     body?: Record<string, any>,
-    skipInterceptor?: boolean
+    skipInterceptor?: boolean,
+    accessToken?: string
   ) {
     const headers = new Headers({
       "Content-Type": "application/json",
@@ -26,7 +27,7 @@ export default class AuthService {
       options.body = JSON.stringify(body);
     }
 
-    const response = await interceptedFetch(url, options);
+    const response = await interceptedFetch(url, options, accessToken);
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -52,20 +53,17 @@ export default class AuthService {
   }
 
   async forgotPassword(email: string) {
-    return await this.request(`${this.apiUrl}/forgot-password`, 'POST', { email });
+    return await this.request(`${this.apiUrl}/reset-password/forgot`, 'POST', { email });
   }
 
   async resendVerification(email: string) {
     return await this.request(`${this.apiUrl}/resend-verification`, 'POST', { email });
   }
 
-  async resetPassword(token: string, password: string) {
-    try {
-      return await this.request(`${this.apiUrl}/reset-password`, 'POST', { token, password });
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
+  async resetPassword(password: string) {
+    return await this.request(`${this.apiUrl}/reset-password/forgot`, 'POST', { password }, true);
   }
+
 
   async logout() {
     // Remove user data from local storage

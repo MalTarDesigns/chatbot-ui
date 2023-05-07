@@ -1,18 +1,14 @@
+import AuthService from '@/services/authService';
 import { useState } from "react";
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
-
+  const authService = new AuthService();
+  
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:4000/api/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+    const response = await authService.forgotPassword(email)
 
     if (response.ok) {
       alert("Password reset email sent!");

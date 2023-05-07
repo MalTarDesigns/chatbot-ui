@@ -4,7 +4,6 @@ import { useState } from "react";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
-  const { token } = router.query as any;
   const authService = new AuthService();
 
   const [password, setPassword] = useState("");
@@ -14,7 +13,7 @@ const ResetPasswordForm = () => {
     event.preventDefault();
 
     try {
-        await authService.resetPassword(token, password);
+        await authService.resetPassword(password);
         alert("Password reset successful!");
     } catch (error: any) {
       alert(`Error: ${error.message}`);

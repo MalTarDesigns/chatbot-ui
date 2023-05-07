@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 import Link from 'next/link';
 import router from 'next/router';
+
 import AuthService from '@/services/authService';
 
 const RegisterForm = () => {
@@ -19,13 +21,9 @@ const RegisterForm = () => {
     }
 
     try {
-      if (authService) {
-        await authService.signUp({ name, email, password });
-        alert("Registration successful!");
-        router.push('login');
-      } else {
-        throw new Error('SignUp function is not available');
-      }
+      await authService.signUp({ name, email, password });
+      alert('Registration successful!');
+      router.push('login');
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || error.message;
       alert(`Error: ${errorMessage}`);
@@ -34,21 +32,15 @@ const RegisterForm = () => {
 
   return (
     <div className="flex flex-col items-center bg-white font-helvetica min-h-screen relative justify-center">
-
       <div className="w-full flex justify-center mb-[18px]">
-        <img className='h-[207px] w-[276px]' src='images/app-logo.png' />
+        <img className="h-[207px] w-[276px]" src="images/app-logo.png" />
       </div>
 
-      <div className='max-w-sm w-full flex flex-col items-center z-[9]'>
-
-      <div className="text-xl font-semibold">Create your Account</div>
+      <div className="max-w-sm w-full flex flex-col items-center z-[9]">
+        <div className="text-xl font-semibold">Create your Account</div>
 
         <div className="flex flex-col justify-center min-w-[255px]">
-          <form
-            onSubmit={handleSubmit}
-            className="overflow-hidden"
-          >
-
+          <form onSubmit={handleSubmit} className="overflow-hidden">
             <div className="mb-4 mt-6 relative">
               <input
                 type="text"
@@ -65,7 +57,6 @@ const RegisterForm = () => {
               >
                 Name
               </label>
-
             </div>
 
             <div className="mb-4 mt-6 relative">
@@ -75,7 +66,7 @@ const RegisterForm = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder='email'
+                placeholder="email"
                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-rose-600"
               />
               <label
@@ -93,7 +84,7 @@ const RegisterForm = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                placeholder='password'
+                placeholder="password"
                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-rose-600"
               />
               <label
@@ -111,7 +102,7 @@ const RegisterForm = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                placeholder='Confirm Password'
+                placeholder="Confirm Password"
                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-rose-600"
               />
               <label
@@ -129,7 +120,7 @@ const RegisterForm = () => {
               Sign Up
             </button>
             <p className="mt-4">
-              <span className='text-[#7B7B7B]'>Already have an account?</span>{' '}
+              <span className="text-[#7B7B7B]">Already have an account?</span>{' '}
               <Link href="/login">
                 <span className="text-[#38A8BF]">Login</span>
               </Link>
