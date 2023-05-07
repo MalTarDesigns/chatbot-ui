@@ -1,11 +1,11 @@
+import AuthService from '@/services/authService';
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
-  // const { token } = router.query;
-  const { resetPassword } = useAuth();
+  const { token } = router.query as any;
+  const authService = new AuthService();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -14,11 +14,8 @@ const ResetPasswordForm = () => {
     event.preventDefault();
 
     try {
-      if (resetPassword) {
-        const token = 'test'
-        await resetPassword(token, password);
+        await authService.resetPassword(token, password);
         alert("Password reset successful!");
-      }
     } catch (error: any) {
       alert(`Error: ${error.message}`);
     }
