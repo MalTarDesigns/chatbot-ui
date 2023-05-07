@@ -26,7 +26,7 @@ const ForgotPasswordForm = () => {
     <div className="flex flex-col items-center bg-white font-helvetica min-h-screen relative justify-center">
 
       <div className="w-full flex justify-center mb-[18px]">
-        <img className='h-[207px] w-[276px]' src='images/app-logo.png' />
+        <img className='h-[207px] w-[276px]' src='images/app-logo.png' alt="App Logo" />
       </div>
 
       <div className='max-w-sm w-full flex flex-col items-center'>
