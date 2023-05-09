@@ -1,29 +1,6 @@
-import { useEffect, useState } from "react";
 import Link from 'next/link';
 
-import AuthService from '@/services/authService';
-
 const EmailVerifiation = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [emailToBeVerified, setEmailToBeVerified] = useState('');
-  const authService = new AuthService();
-
-  useEffect(() => {
-    const emailToBeVerified = localStorage.getItem('emailToBeVerified');
-    if (emailToBeVerified && typeof emailToBeVerified === 'string' && authService.isEmailValid(emailToBeVerified)) {
-      setEmailToBeVerified(emailToBeVerified);
-    }
-    localStorage.removeItem('emailToBeVerified');
-  }, []);
-
-  const resendVerificationLink = async () => {
-    if (emailToBeVerified) {
-      setIsLoading(true);
-      await authService.resendVerification(emailToBeVerified);
-      setIsLoading(false);
-      alert('Email verification link has been sent successfully!');
-    }
-  };
 
   return (
     <div>
@@ -52,7 +29,9 @@ const EmailVerifiation = () => {
             </Link>
 
             <div className="text-[#7B7B7B] text-[13.5px]">
-              Didn't receive the email?{' '}<span onClick={(e) => resendVerificationLink()} className="text-[#38A8BF] cursor-pointer">Resend</span>
+              Didn't receive the email?{' '}<span className="text-[#38A8BF] cursor-pointer">
+                <Link href={'/resend-verification-email'}>Resend</Link>
+              </span>
             </div>
           </div>
         </div>
