@@ -23,7 +23,8 @@ const RegisterForm = () => {
     try {
       await authService.signUp({ name, email, password });
       alert('Registration successful!');
-      router.push('login');
+      localStorage.setItem('emailToBeVerified', email);
+      router.push('email-verification');
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || error.message;
       alert(`Error: ${errorMessage}`);
