@@ -10,7 +10,6 @@ const ForgotPasswordForm = () => {
     event.preventDefault();
     try {
       const response = await authService.forgotPassword(email);
-      alert(response.message);
       setShowForgotPassword(false);
     } catch (error: any) {
       console.log(error.message);
