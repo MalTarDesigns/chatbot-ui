@@ -65,8 +65,8 @@ export default class AuthService {
     return await this.request(`${this.apiUrl}/resendEmailVerificationLink`, 'POST', { email });
   }
 
-  async resetPassword(password: string) {
-    return await this.request(`${this.apiUrl}/reset-password/forgot`, 'POST', { password }, true);
+  async resetPassword(password: string, resetPasswordCode: string) {
+    return await this.request(`${this.apiUrl}/reset-password/reset/${resetPasswordCode}`, 'POST', { password }, true);
   }
 
   async verifyEmail(emailVerificationCode: string) {

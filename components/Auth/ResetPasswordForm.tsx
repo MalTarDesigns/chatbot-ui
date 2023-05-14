@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
+  const { resetPasswordCode } = router.query;
   const authService = new AuthService();
 
   const [password, setPassword] = useState("");
@@ -12,11 +13,20 @@ const ResetPasswordForm = () => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    try {
-        await authService.resetPassword(password);
-        alert("Password reset successful!");
-    } catch (error: any) {
-      alert(`Error: ${error.message}`);
+    if (password !== confirmPassword) {
+      alert('Password and Confirm Password don\'t match!');
+      return;
+    }
+
+    if (resetPasswordCode && typeof resetPasswordCode === 'string') {
+      try {
+        const response: any = await authService.resetPassword(password, resetPasswordCode);
+        if (response.status) {
+          alert("Password reset successful!");
+        }
+      } catch (error: any) {
+        alert(`Error: ${error.message}`);
+      }
     }
   };
 
@@ -24,7 +34,7 @@ const ResetPasswordForm = () => {
     <div className="flex flex-col items-center bg-white font-helvetica min-h-screen relative justify-center">
 
       <div className="w-full flex justify-center mb-[18px]">
-        <img className='h-[207px] w-[276px]' src='images/app-logo.png' />
+        <img className='h-[207px] w-[276px]' src='/images/app-logo.png' />
       </div>
 
       <div className='max-w-sm w-full flex flex-col items-center'>
