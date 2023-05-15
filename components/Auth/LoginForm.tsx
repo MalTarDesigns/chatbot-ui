@@ -107,7 +107,7 @@ const LoginForm = () => {
               Login
             </button>
 
-            <p className="mb-[27px]">
+            <p className="mb-[27px] text-center">
               <span className='text-[#7B7B7B]'>Don't have an account?</span>{' '}
               <Link href="/signup">
                 <span className="text-[#38A8BF]">Sign Up</span>

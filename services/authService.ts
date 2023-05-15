@@ -2,6 +2,11 @@ import { interceptedFetch } from '@/utils/interceptors';
 
 export default class AuthService {
   apiUrl: string = 'https://phpstack-404120-3327055.cloudwaysapps.com/api/v1';
+  emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  isEmailValid(email: string) {
+    return this.emailRegex.test(email);
+  }
 
   async request(
     url: string,
@@ -57,13 +62,16 @@ export default class AuthService {
   }
 
   async resendVerification(email: string) {
-    return await this.request(`${this.apiUrl}/resend-verification`, 'POST', { email });
+    return await this.request(`${this.apiUrl}/resendEmailVerificationLink`, 'POST', { email });
   }
 
-  async resetPassword(password: string) {
-    return await this.request(`${this.apiUrl}/reset-password/forgot`, 'POST', { password }, true);
+  async resetPassword(password: string, resetPasswordCode: string) {
+    return await this.request(`${this.apiUrl}/reset-password/reset/${resetPasswordCode}`, 'POST', { password }, true);
   }
 
+  async verifyEmail(emailVerificationCode: string) {
+    return await this.request(`${this.apiUrl}/verify/email`, 'POST', { emailVerificationCode  }, true);
+  }
 
   async logout() {
     // Remove user data from local storage
