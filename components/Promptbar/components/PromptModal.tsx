@@ -13,6 +13,7 @@ interface Props {
 export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt }) => {
   const { t } = useTranslation('promptbar');
   const [name, setName] = useState(prompt.name);
+  const [category, setCategory] = useState(prompt.category);
   const [description, setDescription] = useState(prompt.description);
   const [content, setContent] = useState(prompt.content);
 
@@ -21,7 +22,7 @@ export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt }) => {
 
   const handleEnter = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      onUpdatePrompt({ ...prompt, name, description, content: content.trim() });
+      onUpdatePrompt({ ...prompt, name, category, description, content: content.trim() });
       onClose();
     }
   };
@@ -78,6 +79,16 @@ export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt }) => {
             />
 
             <div className="mt-6 text-sm font-bold text-black dark:text-neutral-200">
+              Category
+            </div>
+            <input
+              className="mt-2 w-full rounded-lg border border-neutral-500 px-4 py-2 text-neutral-900 shadow focus:outline-none dark:border-neutral-800 dark:border-opacity-50 dark:bg-[#40414F] dark:text-neutral-100"
+              placeholder="A category of your prompt"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
+
+            <div className="mt-6 text-sm font-bold text-black dark:text-neutral-200">
               {t('Description')}
             </div>
             <textarea
@@ -112,6 +123,7 @@ export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt }) => {
                 const updatedPrompt = {
                   ...prompt,
                   name,
+                  category,
                   description,
                   content: content.trim(),
                 };
